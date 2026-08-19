@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAD1023 — Fizik I | PASUM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EEF1EE;
+    --grid-line:rgba(27,42,46,0.07);
+    --surface:#FFFFFF;
+    --ink:#1B2A2E;
+    --ink-muted:#5C6E6A;
+    --red-pen:#B23A2E;
+    --measured-green:#2F6B52;
+    --radius:10px;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, monospace;
+    --sans:'IBM Plex Sans', -apple-system, sans-serif;
+    --max:1080px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:28px 28px;
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 24px;}
+  .eyebrow{
+    font-family:var(--mono); font-size:0.75rem; letter-spacing:0.12em;
+    text-transform:uppercase; color:var(--ink-muted);
+  }
+
+  /* Header */
+  header{
+    position:sticky; top:0; z-index:20;
+    background:rgba(238,241,238,0.85); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--grid-line);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px;
+  }
+  .brand{font-family:var(--mono); font-weight:600; font-size:0.95rem; letter-spacing:0.02em;}
+  .brand span{color:var(--red-pen);}
+  .nav-links{display:flex; gap:28px; list-style:none; font-size:0.9rem;}
+  .nav-links a{text-decoration:none; padding:4px 2px; border-bottom:2px solid transparent; transition:border-color .15s;}
+  .nav-links a:hover{border-color:var(--red-pen);}
+  .nav-toggle{display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:8px;}
+  .nav-toggle span{width:22px; height:2px; background:var(--ink); display:block; transition:.2s;}
+
+  /* Hero */
+  .hero{padding:72px 0 40px;}
+  .hero h1{
+    font-family:var(--serif); font-weight:600; font-size:clamp(2.2rem, 5vw, 3.4rem);
+    line-height:1.08; margin:14px 0 16px; max-width:16ch;
+  }
+  .hero h1 em{font-style:italic; color:var(--red-pen);}
+  .hero p{color:var(--ink-muted); max-width:52ch; font-size:1.05rem;}
+  .stats{display:flex; gap:40px; margin-top:36px; flex-wrap:wrap;}
+  .stat b{display:block; font-family:var(--mono); font-size:1.8rem; font-weight:600;}
+  .stat span{font-size:0.8rem; color:var(--ink-muted); font-family:var(--mono); letter-spacing:0.04em;}
+
+  /* Measurement strip signature */
+  .strip{position:relative; height:64px; margin:20px 0 56px;}
+  .strip svg{width:100%; height:100%; display:block; overflow:visible;}
+
+  /* Section shell */
+  section.block{padding:56px 0;}
+  .block-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:8px;}
+  .block-head h2{font-family:var(--serif); font-size:1.7rem; font-weight:600;}
+
+  /* Syllabus grid */
+  .syllabus-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px;}
+  .week-card{
+    background:var(--surface); border-radius:var(--radius); padding:20px;
+    border:1px solid var(--grid-line);
+  }
+  .week-card .eyebrow{color:var(--measured-green);}
+  .week-card h3{font-family:var(--serif); font-size:1.05rem; margin:8px 0 6px; font-weight:600;}
+  .week-card p{font-size:0.88rem; color:var(--ink-muted);}
+
+  /* Materials grid */
+  .materials-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px;}
+  .mat-card{
+    background:var(--surface); border-radius:var(--radius); padding:22px;
+    border:1px solid var(--grid-line);
+  }
+  .mat-card svg{width:26px; height:26px; stroke:var(--red-pen); margin-bottom:12px;}
+  .mat-card h3{font-family:var(--sans); font-weight:600; font-size:1rem; margin-bottom:4px;}
+  .mat-card p{font-size:0.85rem; color:var(--ink-muted);}
+
+  /* Announcements */
+  .announce-list{display:flex; flex-direction:column; border-top:1px solid var(--grid-line);}
+  .announce-item{
+    display:flex; gap:20px; padding:16px 0; border-bottom:1px solid var(--grid-line);
+    align-items:baseline; flex-wrap:wrap;
+  }
+  .announce-item .tag{
+    font-family:var(--mono); font-size:0.72rem; color:var(--surface);
+    background:var(--red-pen); padding:2px 8px; border-radius:4px; letter-spacing:0.04em;
+  }
+  .announce-item .date{font-family:var(--mono); font-size:0.8rem; color:var(--ink-muted); min-width:90px;}
+
+  /* Footer */
+  footer{padding:56px 0 40px; border-top:1px solid var(--grid-line); margin-top:40px;}
+  footer h2{font-family:var(--serif); font-size:1.4rem; margin-bottom:14px;}
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  footer p{font-size:0.9rem; color:var(--ink-muted); margin-bottom:6px;}
+  .fine{font-family:var(--mono); font-size:0.72rem; color:var(--ink-muted); margin-top:32px;}
+
+  @media (max-width:720px){
+    .nav-links{
+      position:absolute; top:64px; left:0; right:0; background:var(--paper);
+      flex-direction:column; gap:0; max-height:0; overflow:hidden; border-bottom:1px solid var(--grid-line);
+      transition:max-height .2s ease;
+    }
+    .nav-links.open{max-height:260px;}
+    .nav-links a{display:block; padding:14px 24px; border-bottom:1px solid var(--grid-line);}
+    .nav-toggle{display:flex;}
+    .contact-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav-inner">
+    <div class="brand">FAD1023<span>·</span>PASUM</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#silibus">Silibus</a></li>
+      <li><a href="#bahan">Materials</a></li>
+      <li><a href="#jadual">Announcements</a></li>
+      <li><a href="#hubungi">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Pusat Asasi Sains · Universiti Malaya</div>
+    <h1>Fizik I <em>—</em> foundations for everything that moves.</h1>
+    <p>Kinematics through rotational mechanics and AC circuits, taught for students heading into science and engineering degrees. This page is your syllabus, your materials, and your schedule in one place.</p>
+    <div class="stats">
+      <div class="stat"><b>~900</b><span>STUDENTS</span></div>
+      <div class="stat"><b>3</b><span>CREDIT HOURS</span></div>
+      <div class="stat"><b>14</b><span>WEEKS</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap strip">
+  <svg viewBox="0 0 1000 64" preserveAspectRatio="none">
+    <line x1="0" y1="48" x2="1000" y2="48" stroke="var(--grid-line)" stroke-width="1"/>
+    <!-- tick marks -->
+    <g stroke="var(--ink-muted)" stroke-width="1">
+      <line x1="0" y1="40" x2="0" y2="48"/>
+      <line x1="83" y1="44" x2="83" y2="48"/>
+      <line x1="166" y1="40" x2="166" y2="48"/>
+      <line x1="250" y1="44" x2="250" y2="48"/>
+      <line x1="333" y1="40" x2="333" y2="48"/>
+      <line x1="416" y1="44" x2="416" y2="48"/>
+      <line x1="500" y1="36" x2="500" y2="48"/>
+      <line x1="583" y1="44" x2="583" y2="48"/>
+      <line x1="666" y1="40" x2="666" y2="48"/>
+      <line x1="750" y1="44" x2="750" y2="48"/>
+      <line x1="833" y1="40" x2="833" y2="48"/>
+      <line x1="916" y1="44" x2="916" y2="48"/>
+      <line x1="1000" y1="40" x2="1000" y2="48"/>
+    </g>
+    <!-- orbiting point: angular momentum motif -->
+    <circle r="4" fill="var(--red-pen)">
+      <animateMotion dur="6s" repeatCount="indefinite"
+        path="M 500 48 m -60,0 a 60,20 0 1,0 120,0 a 60,20 0 1,0 -120,0" />
+    </circle>
+    <ellipse cx="500" cy="48" rx="60" ry="20" fill="none" stroke="var(--measured-green)" stroke-width="1" stroke-dasharray="2 4"/>
+  </svg>
+</div>
+
+<section class="block" id="silibus">
+  <div class="wrap">
+    <div class="block-head">
+      <h2>Silibus — Course Outline</h2>
+      <span class="eyebrow">14 weeks</span>
+    </div>
+    <div class="syllabus-grid">
+      <div class="week-card"><div class="eyebrow">Week 01–02</div><h3>Kinematics &amp; Dynamics</h3><p>Motion in one and two dimensions, Newton's laws, applications.</p></div>
+      <div class="week-card"><div class="eyebrow">Week 03</div><h3>Work, Energy &amp; Power</h3><p>Conservation of energy, work-energy theorem.</p></div>
+      <div class="week-card"><div class="eyebrow">Week 04–06</div><h3>Rotational Mechanics</h3><p>Moment of inertia, torque, rotational kinetic energy.</p></div>
+      <div class="week-card"><div class="eyebrow">Week 07</div><h3>Equilibrium &amp; Centre of Mass</h3><p>Rigid body equilibrium, beam and ladder problems.</p></div>
+      <div class="week-card"><div class="eyebrow">Week 08</div><h3>Angular Momentum</h3><p>Conservation of angular momentum, rotational collisions.</p></div>
+      <div class="week-card"><div class="eyebrow">Week 09–10</div><h3>Intermolecular Forces</h3><p>Lennard-Jones potential, stress-strain behaviour.</p></div>
+      <div class="week-card"><div class="eyebrow">Week 11–13</div><h3>AC Circuits</h3><p>RLC circuits, impedance, resonance.</p></div>
+      <div class="week-card"><div class="eyebrow">Week 14</div><h3>Review &amp; HOTS Assessment</h3><p>Consolidation and higher-order problem sets.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="bahan" style="background:var(--surface); border-top:1px solid var(--grid-line); border-bottom:1px solid var(--grid-line);">
+  <div class="wrap">
+    <div class="block-head"><h2>Learning Materials</h2></div>
+    <div class="materials-grid">
+      <div class="mat-card">
+        <svg fill="none" stroke-width="1.6" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/></svg>
+        <h3>Lecture Notes</h3><p>Slide decks and worked examples, by week.</p>
+      </div>
+      <div class="mat-card">
+        <svg fill="none" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <h3>Concept Animations</h3><p>Short visualisations of rotational motion and forces.</p>
+      </div>
+      <div class="mat-card">
+        <svg fill="none" stroke-width="1.6" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>
+        <h3>HOTS Exit Tickets</h3><p>Diagnostic questions after each lecture.</p>
+      </div>
+      <div class="mat-card">
+        <svg fill="none" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <h3>ClassPoint Sessions</h3><p>Live poll links and session recaps.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="jadual">
+  <div class="wrap">
+    <div class="block-head"><h2>Announcements</h2></div>
+    <div class="announce-list">
+      <div class="announce-item"><span class="tag">NEW</span><span class="date">19 Aug</span><span>Quiz 3 covers Weeks 04–06 (rotational mechanics).</span></div>
+      <div class="announce-item"><span class="date">12 Aug</span><span>Office hours moved to Thursdays, 2–4pm.</span></div>
+      <div class="announce-item"><span class="date">05 Aug</span><span>Week 04 lecture notes and animation set uploaded.</span></div>
+    </div>
+  </div>
+</section>
+
+<footer id="hubungi">
+  <div class="wrap">
+    <h2>Contact</h2>
+    <div class="contact-grid">
+      <div>
+        <p><strong>Dr. Mohd Fahmi bin Azman</strong></p>
+        <p>Pusat Asasi Sains, Universiti Malaya</p>
+        <p>Office hours: Thursdays, 2:00–4:00pm</p>
+      </div>
+      <div>
+        <p>Email: yourname@um.edu.my</p>
+        <p>Room: PASUM Block, Level —</p>
+      </div>
+    </div>
+    <div class="fine">FAD1023 · PASUM · Universiti Malaya</div>
+  </div>
+</footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+</script>
+
+</body>
+</html>
